@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Prediksi{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Prediksi Persetujuan Pengajuan Pinjaman</h1>
+  <p>Isi data pemohon, lalu model Random Forest akan memperkirakan apakah pinjaman
+     <b>disetujui</b> atau <b>ditolak</b>. Akurasi model pada data uji:
+     <b>{{ "%.2f"|format(meta.metrics.accuracy * 100) }}%</b>.</p>
+</section>
+
+<div class="grid">
+  <form method="post" class="card" id="loan-form" novalidate>
+    <div class="card-head">
+      <h2>Data Pemohon</h2>
+      <div class="samples">
+        <span>Isi contoh:</span>
+        <button type="button" class="chip" data-sample="approved">Contoh disetujui</button>
+        <button type="button" class="chip" data-sample="rejected">Contoh ditolak</button>
+      </div>
+    </div>
+
+    {% if errors %}
+    <div class="alert alert-error">
+      <b>Periksa kembali input:</b>
+      <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+
+    <fieldset>
+      <legend>Profil</legend>
+      <div class="row3">
+        <label>{{ labels.no_of_dependents }}
+          <input type="number" name="no_of_dependents" min="0" max="20" step="1"
+                 value="{{ (values.no_of_dependents|int) if values.no_of_dependents is number else values.no_of_dependents|default('') }}" required>
+        </label>
+        <label>{{ labels.education }}
+          <select name="education" required>
+            <option value="Graduate" {{ 'selected' if values.education == 'Graduate' }}>Sarjana (Graduate)</option>
+            <option value="Not Graduate" {{ 'selected' if values.education == 'Not Graduate' }}>Non-Sarjana (Not Graduate)</option>
+          </select>
+        </label>
+        <label>{{ labels.self_employed }}
+          <select name="self_employed" required>
+            <option value="No" {{ 'selected' if values.self_employed == 'No' }}>Tidak</option>
+            <option value="Yes" {{ 'selected' if values.self_employed == 'Yes' }}>Ya</option>
+          </select>
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Pinjaman &amp; Kredit</legend>
+      <div class="row2">
+        {% for f, hint in [('income_annum', 'per tahun'), ('loan_amount', 'yang diajukan'),
+                           ('loan_term', 'tahun, 2–20'), ('cibil_score', '300–900')] %}
+        <label>{{ labels[f] }} <small>({{ hint }})</small>
+          <input type="number" name="{{ f }}" min="0" step="any" inputmode="numeric"
+                 value="{{ (values[f]|int) if values[f] is number else values[f]|default('') }}" required>
+        </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Aset</legend>
+      <div class="row2">
+        {% for f in ['residential_assets_value', 'commercial_assets_value', 'luxury_assets_value', 'bank_asset_value'] %}
+        <label>{{ labels[f] }}
+          <input type="number" name="{{ f }}" min="0" step="any" inputmode="numeric"
+                 value="{{ (values[f]|int) if values[f] is number else values[f]|default('') }}" required>
+        </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <p class="note">Nominal uang mengikuti satuan dataset asli (Rupee India). Skor kredit
+      memakai skala CIBIL 300–900.</p>
+
+    <div class="actions">
+      <button type="submit" class="btn">Prediksi Sekarang</button>
+      <a href="{{ url_for('index') }}" class="btn btn-ghost">Reset</a>
+    </div>
+  </form>
+
+  <aside>
+    {% if result %}
+    <div class="card result {{ 'ok' if result.status == 'Approved' else 'no' }}">
+      <p class="result-label">Hasil Prediksi</p>
+      <p class="result-status">{{ result.status_id }}</p>
+      <p class="result-sub">({{ result.status }})</p>
+
+      <div class="prob">
+        <div class="prob-row"><span>Disetujui</span><b>{{ result.prob_approved }}%</b></div>
+        <div class="bar"><div class="fill ok" style="width: {{ result.prob_approved }}%"></div></div>
+        <div class="prob-row"><span>Ditolak</span><b>{{ result.prob_rejected }}%</b></div>
+        <div class="bar"><div class="fill no" style="width: {{ result.prob_rejected }}%"></div></div>
+      </div>
+
+      {% if result.loan_to_income is defined %}
+      <p class="small">Rasio pinjaman / pendapatan tahunan: <b>{{ result.loan_to_income }}×</b></p>
+      {% endif %}
+      <p class="small">Probabilitas = persentase pohon (dari {{ meta.best_params.n_estimators }})
+        yang memilih kelas tersebut.</p>
+    </div>
+    {% for w in warnings %}
+    <div class="alert alert-warn">{{ w }}</div>
+    {% endfor %}
+    {% else %}
+    <div class="card info">
+      <h3>Faktor paling berpengaruh</h3>
+      <p class="small">Menurut Feature Importance model:</p>
+      <ol class="fi-list">
+        {% for item in meta.feature_importance[:5] %}
+        <li>
+          <span>{{ item.label }}</span>
+          <div class="bar thin"><div class="fill" style="width: {{ (item.importance / meta.feature_importance[0].importance * 100)|round(1) }}%"></div></div>
+          <b>{{ "%.1f"|format(item.importance * 100) }}%</b>
+        </li>
+        {% endfor %}
+      </ol>
+      <p class="small">Skor kredit sangat dominan: riwayat pembayaran pemohon adalah
+        penentu utama keputusan.</p>
+    </div>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Dua baris asli dari dataset (baris ke-1 Approved, baris ke-2 Rejected)
+  const SAMPLES = {
+    approved: { no_of_dependents: 2, education: "Graduate", self_employed: "No",
+      income_annum: 9600000, loan_amount: 29900000, loan_term: 12, cibil_score: 778,
+      residential_assets_value: 2400000, commercial_assets_value: 17600000,
+      luxury_assets_value: 22700000, bank_asset_value: 8000000 },
+    rejected: { no_of_dependents: 0, education: "Not Graduate", self_employed: "Yes",
+      income_annum: 4100000, loan_amount: 12200000, loan_term: 8, cibil_score: 417,
+      residential_assets_value: 2700000, commercial_assets_value: 2200000,
+      luxury_assets_value: 8800000, bank_asset_value: 3300000 }
+  };
+  document.querySelectorAll("[data-sample]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const data = SAMPLES[btn.dataset.sample];
+      const form = document.getElementById("loan-form");
+      for (const [k, v] of Object.entries(data)) form.elements[k].value = v;
+    });
+  });
+</script>
+{% endblock %}

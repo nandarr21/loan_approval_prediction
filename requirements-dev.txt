@@ -1,0 +1,5 @@
+# Library tambahan untuk TRAINING & NOTEBOOK (hanya di laptop, tidak di-deploy)
+-r requirements.txt
+matplotlib>=3.8
+seaborn>=0.13
+ipykernel>=6.0

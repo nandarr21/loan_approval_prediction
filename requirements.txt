@@ -1,0 +1,6 @@
+# Library untuk MENJALANKAN aplikasi web (dipakai juga oleh Vercel saat deploy)
+flask>=3.0
+scikit-learn>=1.4
+pandas>=2.0
+numpy>=1.26
+joblib>=1.3

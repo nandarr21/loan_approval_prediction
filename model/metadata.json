@@ -1,0 +1,236 @@
+{
+  "best_params": {
+    "n_estimators": 200,
+    "max_depth": "20"
+  },
+  "metrics": {
+    "accuracy": 0.9824355971896955,
+    "f1_macro": 0.9812936718287955,
+    "report": {
+      "Rejected": {
+        "precision": 0.98125,
+        "recall": 0.9721362229102167,
+        "f1-score": 0.9766718506998445,
+        "support": 323.0
+      },
+      "Approved": {
+        "precision": 0.9831460674157303,
+        "recall": 0.9887005649717514,
+        "f1-score": 0.9859154929577465,
+        "support": 531.0
+      },
+      "accuracy": 0.9824355971896955,
+      "macro avg": {
+        "precision": 0.9821980337078651,
+        "recall": 0.9804183939409841,
+        "f1-score": 0.9812936718287955,
+        "support": 854.0
+      },
+      "weighted avg": {
+        "precision": 0.9824289365313263,
+        "recall": 0.9824355971896955,
+        "f1-score": 0.9824193612840904,
+        "support": 854.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        314,
+        9
+      ],
+      [
+        6,
+        525
+      ]
+    ]
+  },
+  "n_train": 3415,
+  "n_test": 854,
+  "class_distribution": {
+    "Approved": 2656,
+    "Rejected": 1613
+  },
+  "scenario_a": [
+    {
+      "n_estimators": 10,
+      "acc_train": 0.9982430453879941,
+      "acc_test": 0.9812646370023419,
+      "cv_mean": 0.9718887262079063,
+      "cv_std": 0.0033897033390308104
+    },
+    {
+      "n_estimators": 50,
+      "acc_train": 1.0,
+      "acc_test": 0.9800936768149883,
+      "cv_mean": 0.9774524158125916,
+      "cv_std": 0.004685212298682265
+    },
+    {
+      "n_estimators": 100,
+      "acc_train": 1.0,
+      "acc_test": 0.9800936768149883,
+      "cv_mean": 0.9797950219619327,
+      "cv_std": 0.004934787568478117
+    },
+    {
+      "n_estimators": 200,
+      "acc_train": 1.0,
+      "acc_test": 0.9824355971896955,
+      "cv_mean": 0.9789165446559298,
+      "cv_std": 0.0055250255531810455
+    },
+    {
+      "n_estimators": 500,
+      "acc_train": 1.0,
+      "acc_test": 0.9812646370023419,
+      "cv_mean": 0.9815519765739384,
+      "cv_std": 0.004775843757042499
+    }
+  ],
+  "scenario_b": [
+    {
+      "max_depth": "3",
+      "acc_train": 0.9651537335285505,
+      "acc_test": 0.9718969555035128,
+      "gap": -0.0067432219749623545
+    },
+    {
+      "max_depth": "5",
+      "acc_train": 0.976281112737921,
+      "acc_test": 0.9742388758782201,
+      "gap": 0.002042236859700841
+    },
+    {
+      "max_depth": "10",
+      "acc_train": 0.9997071742313324,
+      "acc_test": 0.9800936768149883,
+      "gap": 0.019613497416344106
+    },
+    {
+      "max_depth": "20",
+      "acc_train": 1.0,
+      "acc_test": 0.9824355971896955,
+      "gap": 0.01756440281030447
+    },
+    {
+      "max_depth": "None",
+      "acc_train": 1.0,
+      "acc_test": 0.9824355971896955,
+      "gap": 0.01756440281030447
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "cibil_score",
+      "label": "Skor Kredit (CIBIL)",
+      "importance": 0.804626146367174
+    },
+    {
+      "feature": "loan_term",
+      "label": "Tenor Pinjaman",
+      "importance": 0.06494861797141864
+    },
+    {
+      "feature": "loan_amount",
+      "label": "Jumlah Pinjaman",
+      "importance": 0.030753402342573503
+    },
+    {
+      "feature": "income_annum",
+      "label": "Pendapatan Tahunan",
+      "importance": 0.019191999298920327
+    },
+    {
+      "feature": "luxury_assets_value",
+      "label": "Aset Mewah",
+      "importance": 0.018563634626169022
+    },
+    {
+      "feature": "residential_assets_value",
+      "label": "Aset Rumah Tinggal",
+      "importance": 0.016868788426284285
+    },
+    {
+      "feature": "commercial_assets_value",
+      "label": "Aset Komersial",
+      "importance": 0.01661297876807577
+    },
+    {
+      "feature": "bank_asset_value",
+      "label": "Aset di Bank",
+      "importance": 0.015532890242364122
+    },
+    {
+      "feature": "no_of_dependents",
+      "label": "Jumlah Tanggungan",
+      "importance": 0.008093417980705614
+    },
+    {
+      "feature": "self_employed",
+      "label": "Wiraswasta",
+      "importance": 0.002581170605098622
+    },
+    {
+      "feature": "education",
+      "label": "Pendidikan",
+      "importance": 0.0022269533712160664
+    }
+  ],
+  "feature_ranges": {
+    "no_of_dependents": {
+      "min": 0.0,
+      "max": 5.0,
+      "median": 3.0
+    },
+    "education": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 1.0
+    },
+    "self_employed": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 1.0
+    },
+    "income_annum": {
+      "min": 200000.0,
+      "max": 9900000.0,
+      "median": 5100000.0
+    },
+    "loan_amount": {
+      "min": 300000.0,
+      "max": 39500000.0,
+      "median": 14500000.0
+    },
+    "loan_term": {
+      "min": 2.0,
+      "max": 20.0,
+      "median": 10.0
+    },
+    "cibil_score": {
+      "min": 300.0,
+      "max": 900.0,
+      "median": 600.0
+    },
+    "residential_assets_value": {
+      "min": 0.0,
+      "max": 29100000.0,
+      "median": 5600000.0
+    },
+    "commercial_assets_value": {
+      "min": 0.0,
+      "max": 19400000.0,
+      "median": 3700000.0
+    },
+    "luxury_assets_value": {
+      "min": 300000.0,
+      "max": 39200000.0,
+      "median": 14600000.0
+    },
+    "bank_asset_value": {
+      "min": 0.0,
+      "max": 14700000.0,
+      "median": 4600000.0
+    }
+  }
+}

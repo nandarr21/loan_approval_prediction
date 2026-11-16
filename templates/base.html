@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Loan Approval Prediction{% endblock %} · Random Forest</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="{{ url_for('index') }}">
+        <span class="brand-mark">RF</span>
+        <span>Loan Approval Prediction</span>
+      </a>
+      <nav>
+        <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' }}">Prediksi</a>
+        <a href="{{ url_for('eksperimen') }}" class="{{ 'active' if request.endpoint == 'eksperimen' }}">Hasil Eksperimen</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="wrap footer">
+    TA-06 Pembelajaran Mesin · Prediksi Persetujuan Pinjaman dengan Random Forest
+    (n_estimators={{ meta.best_params.n_estimators }}, max_depth={{ meta.best_params.max_depth }})
+  </footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
