@@ -1,11 +1,3 @@
-"""
-preprocess.py
--------------
-Semua aturan pembersihan & encoding data ada di sini, supaya
-train.py (saat melatih) dan app.py (saat memprediksi) memakai
-aturan yang PERSIS SAMA. Kalau aturannya beda, prediksi web akan salah.
-"""
-
 import pandas as pd
 
 # Urutan fitur yang dipakai model (urutan ini WAJIB sama saat training & prediksi)
