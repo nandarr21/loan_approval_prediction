@@ -1,18 +1,3 @@
-"""
-app.py
-------
-Aplikasi web Flask untuk memprediksi persetujuan pinjaman.
-
-Halaman:
-  /            -> form input + hasil prediksi
-  /eksperimen  -> ringkasan hasil eksperimen (Skenario A, B, Feature Importance)
-  /api/predict -> endpoint JSON (POST), opsional untuk pengujian
-
-Jalankan (setelah `python train.py`):
-    python app.py
-lalu buka http://127.0.0.1:5000
-"""
-
 import json
 import os
 
