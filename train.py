@@ -1,18 +1,3 @@
-"""
-train.py
---------
-Pipeline lengkap TA-06 dalam satu skrip:
-  1. Load & preprocessing data
-  2. Skenario A : pengaruh n_estimators  -> [10, 50, 100, 200, 500]
-  3. Skenario B : pengaruh max_depth     -> [None, 3, 5, 10, 20]
-  4. Feature Importance model terbaik
-  5. Evaluasi akhir (classification report + confusion matrix)
-  6. Simpan model + grafik + metadata untuk aplikasi web
-
-Jalankan dari folder proyek:
-    python train.py
-"""
-
 import json
 import os
 
